@@ -1,0 +1,4 @@
+include ':discovery'
+include ':core'
+include ':app'
+rootProject.name = "MindValley"
