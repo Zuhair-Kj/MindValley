@@ -4,8 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
+import com.adademy.discovery.ThumbnailUrlAdapter
 import com.adademy.discovery.cache.CHANNELS_TABLE_NAME
 import com.google.gson.Gson
+import com.google.gson.annotations.JsonAdapter
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import org.koin.java.KoinJavaComponent
 import java.lang.reflect.Type
@@ -14,8 +17,12 @@ import java.lang.reflect.Type
 data class Channel(
     @PrimaryKey @ColumnInfo(name = "title")val title: String = "",
     @ColumnInfo(name = "series") val series: List<Series>?,
-    @ColumnInfo(name = "mediaCount") val mediaCount: Int,
-    @ColumnInfo(name = "latestMedia") val latestMedia: List<Episode>?
+    @ColumnInfo(name = "mediaCount") val mediaCount: Int = 0,
+    @ColumnInfo(name = "latestMedia") val latestMedia: List<Episode>?,
+    @ColumnInfo(name = "channelIconUrl")
+    @JsonAdapter(ThumbnailUrlAdapter::class)
+    @SerializedName("iconAsset")
+    val channelIconUrl: String?
 ) {
     enum class ChannelType {
         SERIES, COURSE

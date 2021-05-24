@@ -3,31 +3,21 @@ package com.adademy.discovery.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adademy.discovery.R
-import com.adademy.discovery.model.Channel
-import com.adademy.discovery.model.Episode
-import com.adademy.discovery.model.Category
-import com.adademy.discovery.repository.CategoriesRepository
-import com.adademy.discovery.repository.ChannelsRepository
-import com.adademy.discovery.repository.LatestEpisodesRepository
+import com.adademy.discovery.adapter.DiscoveryAdapter
+import com.adademy.discovery.databinding.ActivityMainBinding
+import com.adademy.discovery.model.LatestEpisodesList
 import com.adademy.discovery.viewmodel.DiscoveryViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-    private val channelsRepository: ChannelsRepository by inject()
-    private val latestEpisodesRepository: LatestEpisodesRepository by inject()
-    private val categoriesRepository: CategoriesRepository by inject()
     private val viewModel: DiscoveryViewModel by viewModel()
 
-    var categories: List<Category>? = null
-    var newEpisodes: List<Episode>? = null
-    var channels: List<Channel>? = null
-
+    private val adapter = DiscoveryAdapter(mutableListOf())
+    lateinit var binding: ActivityMainBinding
     private val observer: Observer<DiscoveryViewModel.DiscoveryState> = Observer{ state ->
         Log.d("ZZZ::State",
             String.format("categories = %d \n newEpisodes = %d \n channels = %d",
@@ -35,14 +25,34 @@ class MainActivity : AppCompatActivity() {
                 state?.newEpisodes?.size?: 0,
                 state?.channels?.size?:0)
         )
+
+        val models = mutableListOf<Any>()
+        state?.newEpisodes?.let {
+            models.addAll(listOf(LatestEpisodesList(it)))
+        }
+
+        state?.channels?.let {
+            models.addAll(it)
+        }
+
+        adapter.addItems(models)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = this@MainActivity.adapter
+        }
 
         viewModel.stateLiveData.observe(this, observer)
-        viewModel.fetchLatestEpisodes()
-        viewModel.fetchChannels()
-        viewModel.fetchCategories()
+        viewModel.stateLiveData.value?.let {
+            if (it.newEpisodes?.isNotEmpty() != true && it.categories?.isNotEmpty() != true && it.channels?.isNotEmpty() != true) {
+                viewModel.fetchLatestEpisodes()
+                viewModel.fetchChannels()
+                viewModel.fetchCategories()
+            }
+        }
     }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="episode" type="com.adademy.discovery.model.Episode" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:background="@color/navy_grey">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/image_card"
+            android:layout_width="@dimen/series_card_image_width"
+            android:layout_height="@dimen/series_card_image_height"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardBackgroundColor="@color/navy_grey"
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="@drawable/ripple_white"
+            app:cardCornerRadius="@dimen/margin_small">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/series_card_image_width"
+                android:layout_height="@dimen/series_card_image_height"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{episode.imageUrl}"
+                app:placeholder="@{@drawable/ic_place_holder}"
+                tools:background="@color/bright_cream"
+                tools:layout_width="@dimen/series_card_image_width" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{episode.title}"
+            android:textSize="@dimen/font_size_medium"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:fontFamily="@font/font_family_roboto"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_trivial"
+            app:layout_constraintStart_toStartOf="@id/image_card"
+            app:layout_constraintEnd_toEndOf="@id/image_card"
+            app:layout_constraintTop_toBottomOf="@id/image_card"
+            tools:text="A-Fest Sardinia 2018" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
