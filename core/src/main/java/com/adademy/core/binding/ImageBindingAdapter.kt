@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 
 object ImageViewBindingAdapter {
     @JvmStatic
@@ -15,11 +16,10 @@ object ImageViewBindingAdapter {
         if (!url.isNullOrBlank()) {
             Glide.with(imageView.context)
                 .load(url)
+                .override(imageView.width, imageView.height)
                 .placeholder(resource)
-//                .override(imageView.width, imageView.height)
-//                .apply(RequestOptions.centerCropTransform())
+                .skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .transition(DrawableTransitionOptions.withCrossFade(android.R.integer.config_mediumAnimTime))
                 .into(imageView)
         } else {
             Glide.with(imageView.context)

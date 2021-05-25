@@ -1,6 +1,6 @@
 package com.adademy.core.util
 
-data class Resource<out T>(val status: Status, val data: T? = null, val message: String = "") {
+data class Resource<T>(val status: Status, val data: T? = null, val message: String = "") {
     enum class Status {
         SUCCESS,
         ERROR,
@@ -22,8 +22,8 @@ data class Resource<out T>(val status: Status, val data: T? = null, val message:
             return Resource(Status.NETWORK_DISCONNECTED, data)
         }
 
-        fun <T> loading(): Resource<T> {
-            return Resource(Status.LOADING)
+        fun <T> loading(data: T? = null): Resource<T> {
+            return Resource(Status.LOADING, data)
         }
     }
 }

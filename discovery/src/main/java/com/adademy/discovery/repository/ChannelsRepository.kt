@@ -13,7 +13,7 @@ class ChannelsRepository(
             save(it)
             return it
         }
-        return getCachedChannels()
+        return emptyList()
     }
 
     private suspend fun save(channelList: List<Channel>?) {
@@ -22,7 +22,7 @@ class ChannelsRepository(
         }
     }
 
-    private suspend fun getCachedChannels(): List<Channel> {
+    suspend fun getCachedChannels(): List<Channel> {
         return channelsDao.getAllRows()
     }
 }

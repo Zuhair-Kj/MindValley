@@ -13,7 +13,7 @@ class LatestEpisodesRepository(
             save(it)
             return it
         }
-        return getCachedEpisodes()
+        return emptyList()
     }
 
     private suspend fun save(episodes: List<Episode>?) {
@@ -22,7 +22,7 @@ class LatestEpisodesRepository(
         }
     }
 
-    private suspend fun getCachedEpisodes(): List<Episode> {
+    suspend fun getCachedEpisodes(): List<Episode> {
         return latestEpisodesDao.getAllRows()
     }
 }

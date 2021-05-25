@@ -59,7 +59,9 @@ val networkModule = module {
 val discoveryModule = module {
 
     viewModel {
-        DiscoveryViewModel(channelsRepository = get(), categoriesRepository = get(), latestEpisodesRepository = get())
+        DiscoveryViewModel(channelsRepository = get(), categoriesRepository = get(),
+            latestEpisodesRepository = get(), networkHelper = get()
+        )
     }
 
     single {

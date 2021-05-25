@@ -17,7 +17,7 @@ class EpisodesAdapter(
 
     fun replace(episodes: List<Episode>, viewType: Int) {
         this.episodes.clear()
-        this.episodes.addAll(episodes)
+        this.episodes.addAll(episodes.take(6))
         this.viewType = viewType
         notifyDataSetChanged()
     }

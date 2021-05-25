@@ -13,7 +13,7 @@ class CategoriesRepository(
             save(it)
             return it
         }
-        return getCachedCategories()
+        return emptyList()
     }
 
     private suspend fun save(categories: List<Category>?) {
@@ -22,7 +22,7 @@ class CategoriesRepository(
         }
     }
 
-    private suspend fun getCachedCategories(): List<Category> {
+    suspend fun getCachedCategories(): List<Category> {
         return categoriesDao.getAllRows()
     }
 }
