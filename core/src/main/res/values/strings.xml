@@ -10,4 +10,7 @@
 
     <string name="series">%d series</string>
     <string name="new_episodes">New Episodes</string>
+    <string name="categories_header">Browse by categories</string>
+    <string name="request_failed">There was a problem connecting to our servers</string>
+    <string name="retry">Retry</string>
 </resources>

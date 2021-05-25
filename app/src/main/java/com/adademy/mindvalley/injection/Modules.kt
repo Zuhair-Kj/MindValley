@@ -1,6 +1,7 @@
 package com.adademy.mindvalley.injection
 
 import androidx.room.Room
+import com.adademy.core.util.NetworkHelper
 import com.adademy.discovery.network.DiscoveryService
 import com.adademy.discovery.repository.CategoriesRepository
 import com.adademy.discovery.repository.ChannelsRepository
@@ -22,6 +23,12 @@ import java.util.concurrent.TimeUnit
 
 const val SCOPE_DISCOVERY = "discovery"
 const val BASE_URL = "https://pastebin.com"
+
+@JvmField
+val coreModule = module {
+    single { NetworkHelper(androidContext()) }
+}
+
 @JvmField
 val networkModule = module {
     single<DiscoveryService> {

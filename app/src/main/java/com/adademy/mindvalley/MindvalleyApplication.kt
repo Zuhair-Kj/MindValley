@@ -2,6 +2,7 @@ package com.adademy.mindvalley
 
 import android.app.Application
 import com.adademy.mindvalley.injection.cacheModule
+import com.adademy.mindvalley.injection.coreModule
 import com.adademy.mindvalley.injection.discoveryModule
 import com.adademy.mindvalley.injection.networkModule
 import org.koin.android.ext.koin.androidContext
@@ -17,7 +18,7 @@ class MindvalleyApplication: Application() {
         org.koin.core.context.startKoin {
             androidContext(this@MindvalleyApplication)
             modules(
-                listOf(networkModule, discoveryModule, cacheModule)
+                listOf(coreModule, networkModule, discoveryModule, cacheModule)
             )
 
         }

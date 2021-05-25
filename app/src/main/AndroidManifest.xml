@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MindValley"
         android:name=".MindvalleyApplication">
+
+<!--        <meta-data-->
+<!--            android:name="com.adademy.mindvalley.UnsafeOkHttpGlideModule"-->
+<!--            android:value="GlideModule" />-->
+
     </application>
 
 </manifest>

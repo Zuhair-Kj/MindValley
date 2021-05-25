@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adademy.discovery.R
 import com.adademy.discovery.adapter.DiscoveryAdapter
 import com.adademy.discovery.databinding.ActivityMainBinding
+import com.adademy.discovery.model.CategoryList
 import com.adademy.discovery.model.LatestEpisodesList
 import com.adademy.discovery.viewmodel.DiscoveryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         state?.channels?.let {
             models.addAll(it)
+        }
+
+        state?.categories?.let {
+            models.add(CategoryList(it))
         }
 
         adapter.addItems(models)
