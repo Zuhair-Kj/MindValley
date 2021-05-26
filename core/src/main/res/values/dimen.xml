@@ -15,6 +15,7 @@
     <dimen name="margin_xxlarge">20dp</dimen>
     <dimen name="margin_xxlarger">24dp</dimen>
     <dimen name="margin_huge">30dp</dimen>
+    <dimen name="margin_enormous">56dp</dimen>
     <dimen name="episode_card_width">152dp</dimen>
     <dimen name="episode_card_image_height">228dp</dimen>
     <dimen name="series_card_image_width">320dp</dimen>

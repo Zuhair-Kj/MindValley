@@ -26,89 +26,29 @@ class DiscoveryViewModel(
     get() = mutableStateLiveData
 
 
-    fun fetchChannels() {
-        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, _ ->
-            mutableStateLiveData.postValue(Resource.error(mutableStateLiveData.value?.data))
-        }) {
-            if (networkHelper.isConnected()) {
-                val channels = channelsRepository.getChannels()
-                mutableStateLiveData.value?.data.let { oldState ->
-                    val state = oldState ?: DiscoveryState()
-                    post(Resource.success(state.copy(channels = channels)))
-                }
-            } else {
-                val channels = channelsRepository.getCachedChannels()
-                mutableStateLiveData.value?.data.let { oldState ->
-                    val state = oldState ?: DiscoveryState()
-                    post(Resource.networkError(state.copy(channels = channels)))
-                }
-            }
-        }
-    }
-
-    fun fetchCategories() {
-        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, _ ->
-            mutableStateLiveData.postValue(Resource.error(mutableStateLiveData.value?.data))
-        }) {
-            if (networkHelper.isConnected()) {
-                val categories = categoriesRepository.getCategories()
-                mutableStateLiveData.value?.data.let { oldState ->
-                    val state = oldState ?: DiscoveryState()
-                    post(Resource.success(state.copy(categories = categories)))
-                }
-            } else {
-                val categories = categoriesRepository.getCachedCategories()
-                mutableStateLiveData.value?.data.let { oldState ->
-                    val state = oldState ?: DiscoveryState()
-                    post(Resource.networkError(state.copy(categories = categories)))
-                }
-            }
-        }
-    }
-
-    fun fetchLatestEpisodes() {
+    fun fetchRows() {
         viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, _ ->
             mutableStateLiveData.postValue(Resource.error(mutableStateLiveData.value?.data))
         }) {
             if (networkHelper.isConnected()) {
                 val latestEpisodes = latestEpisodesRepository.getLatestEpisodes()
-                mutableStateLiveData.value?.data.let { oldState ->
-                    val state = oldState ?: DiscoveryState()
-                    post(Resource.success(state.copy(newEpisodes = latestEpisodes)))
-                }
+                val categories = categoriesRepository.getCategories()
+                val channels = channelsRepository.getChannels()
+
+                mutableStateLiveData.postValue(Resource.success(DiscoveryState(latestEpisodes, channels, categories)))
             } else {
                 val latestEpisodes = latestEpisodesRepository.getCachedEpisodes()
-                mutableStateLiveData.value?.data.let { oldState ->
-                    val state = oldState ?: DiscoveryState()
-                    post(Resource.networkError(state.copy(newEpisodes = latestEpisodes)))
-                }
+                val categories = categoriesRepository.getCachedCategories()
+                val channels = channelsRepository.getCachedChannels()
+
+                mutableStateLiveData.postValue(Resource.networkError(DiscoveryState(latestEpisodes, channels, categories)))
             }
         }
     }
 
     fun propagateLoadingState() {
-        post(Resource.loading(mutableStateLiveData.value?.data))
+        mutableStateLiveData.postValue(Resource.loading(mutableStateLiveData.value?.data))
     }
-
-    @Synchronized private fun post(resource: Resource<DiscoveryState>) {
-        mutableStateLiveData.postValue(resource)
-    }
-
-//    fun fetchDiscoveryRows() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            launch {
-//
-//            }
-//
-//            launch {
-//
-//            }
-//
-//            launch {
-//
-//            }
-//        }
-//    }
 
     data class DiscoveryState(
         var newEpisodes: List<Episode>? = null,

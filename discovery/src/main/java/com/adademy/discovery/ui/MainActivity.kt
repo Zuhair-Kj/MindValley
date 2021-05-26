@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -69,11 +68,6 @@ class MainActivity : AppCompatActivity() {
                     binding.offlineGroup.visibility = View.GONE
                     binding.lottieLoader.visibility = View.VISIBLE
                 }
-
-//                if (offlineSnackBar.isShown)
-//                    offlineSnackBar.dismiss()
-//                binding.recyclerView.visibility = View.GONE
-                Toast.makeText(this@MainActivity, "Loading", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -93,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     private val refreshListener = SwipeRefreshLayout.OnRefreshListener {
         binding.swiperefresh.post {
             viewModel.propagateLoadingState()
-            fetchRows()
+            viewModel.fetchRows()
             binding.swiperefresh.isRefreshing = true
         }
     }
@@ -109,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonRetry.setOnClickListener {
             viewModel.propagateLoadingState()
-            fetchRows()
+            viewModel.fetchRows()
         }
 
         binding.swiperefresh.setOnRefreshListener(refreshListener)
@@ -120,19 +114,13 @@ class MainActivity : AppCompatActivity() {
         viewModel.stateLiveData.observe(this, observer)
         viewModel.stateLiveData.value?.data.let {
             if (it?.hasNoRows() != false) {
-                fetchRows()
+                viewModel.fetchRows()
             }
         }
     }
 
-    private fun fetchRows() {
-        viewModel.fetchLatestEpisodes()
-        viewModel.fetchChannels()
-        viewModel.fetchCategories()
-    }
-
     private fun populateRows(state: DiscoveryViewModel.DiscoveryState?) {
-        val models = mutableListOf<Any>()
+        val models = mutableListOf<Any>(getString(R.string.channels_header))
         state?.newEpisodes?.let {
             models.addAll(listOf(LatestEpisodesList(it)))
         }

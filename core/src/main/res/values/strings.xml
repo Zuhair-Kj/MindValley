@@ -14,4 +14,5 @@
     <string name="request_failed">There was a problem connecting to our servers</string>
     <string name="retry">Retry</string>
     <string name="offline">You are offline</string>
+    <string name="channels_header">Channels</string>
 </resources>

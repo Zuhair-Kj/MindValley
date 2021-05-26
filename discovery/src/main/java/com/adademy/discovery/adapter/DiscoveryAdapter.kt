@@ -3,20 +3,23 @@ package com.adademy.discovery.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.adademy.discovery.R
 import com.adademy.discovery.databinding.ItemRowCategoriesBinding
 import com.adademy.discovery.databinding.ItemRowChannelBinding
+import com.adademy.discovery.databinding.ItemRowHeaderBinding
 import com.adademy.discovery.databinding.ItemRowLatestEpisodesBinding
 import com.adademy.discovery.model.CategoryList
 import com.adademy.discovery.model.Channel
 import com.adademy.discovery.model.LatestEpisodesList
+import com.adademy.discovery.ui.viewholders.HeaderViewHolder
 import com.adademy.discovery.ui.viewholders.RowCategoriesViewHolder
 import com.adademy.discovery.ui.viewholders.RowChannelViewHolder
 import com.adademy.discovery.ui.viewholders.RowLatestEpisodesViewHolder
 
 const val VIEW_TYPE_ROW_LATEST_EPISODES = 1001
 const val VIEW_TYPE_ROW_CHANNELS = 1002
-//const val VIEW_TYPE_ROW_SERIES = 1003
-const val VIEW_TYPE_ROW_CATEGORIES = 1004
+const val VIEW_TYPE_ROW_CATEGORIES = 1003
+const val VIEW_TYPE_ROW_HEADER = 1004
 class DiscoveryAdapter(private val items: MutableList<Any>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -31,7 +34,7 @@ class DiscoveryAdapter(private val items: MutableList<Any>): RecyclerView.Adapte
             is LatestEpisodesList -> VIEW_TYPE_ROW_LATEST_EPISODES
             is Channel -> VIEW_TYPE_ROW_CHANNELS
             is CategoryList -> VIEW_TYPE_ROW_CATEGORIES
-            else -> VIEW_TYPE_ROW_LATEST_EPISODES
+            else -> VIEW_TYPE_ROW_HEADER
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -49,7 +52,7 @@ class DiscoveryAdapter(private val items: MutableList<Any>): RecyclerView.Adapte
             }
 
             else -> {
-                RowLatestEpisodesViewHolder(ItemRowLatestEpisodesBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+                HeaderViewHolder(ItemRowHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             }
         }
     }
@@ -62,7 +65,6 @@ class DiscoveryAdapter(private val items: MutableList<Any>): RecyclerView.Adapte
                         holder.bind(it)
                     }
                 }
-
             }
 
             is RowChannelViewHolder -> {
@@ -72,8 +74,9 @@ class DiscoveryAdapter(private val items: MutableList<Any>): RecyclerView.Adapte
             is RowCategoriesViewHolder -> {
                 holder.bind(items[position] as CategoryList)
             }
-            else -> {
 
+            is HeaderViewHolder -> {
+                holder.bind(items[position] as String)
             }
         }
     }
