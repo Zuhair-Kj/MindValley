@@ -19,7 +19,9 @@ class DiscoveryViewModel(
     private val categoriesRepository: CategoriesRepository,
     private val latestEpisodesRepository: LatestEpisodesRepository,
     private val networkHelper: NetworkHelper,
-    private val mutableStateLiveData: MutableLiveData<Resource<DiscoveryState>> = MutableLiveData(Resource.loading())
+    private val mutableStateLiveData: MutableLiveData<Resource<DiscoveryState>> = MutableLiveData(Resource.loading()),
+    private val testDispatcher: CoroutineDispatcher? = null,
+    private val testScope: CoroutineScope? = null
 ): ViewModel() {
 
     val stateLiveData: LiveData<Resource<DiscoveryState>>
@@ -27,21 +29,23 @@ class DiscoveryViewModel(
 
 
     fun fetchRows() {
-        viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, _ ->
-            mutableStateLiveData.postValue(Resource.error(mutableStateLiveData.value?.data))
-        }) {
-            if (networkHelper.isConnected()) {
-                val latestEpisodes = latestEpisodesRepository.getLatestEpisodes()
-                val categories = categoriesRepository.getCategories()
-                val channels = channelsRepository.getChannels()
+        (testScope ?: viewModelScope).launch(testDispatcher ?: Dispatchers.IO ) {
+            try {
+                if (networkHelper.isConnected()) {
+                    val latestEpisodes = latestEpisodesRepository.getLatestEpisodes()
+                    val categories = categoriesRepository.getCategories()
+                    val channels = channelsRepository.getChannels()
 
-                mutableStateLiveData.postValue(Resource.success(DiscoveryState(latestEpisodes, channels, categories)))
-            } else {
-                val latestEpisodes = latestEpisodesRepository.getCachedEpisodes()
-                val categories = categoriesRepository.getCachedCategories()
-                val channels = channelsRepository.getCachedChannels()
+                    mutableStateLiveData.postValue(Resource.success(DiscoveryState(latestEpisodes, channels, categories)))
+                } else {
+                    val latestEpisodes = latestEpisodesRepository.getCachedEpisodes()
+                    val categories = categoriesRepository.getCachedCategories()
+                    val channels = channelsRepository.getCachedChannels()
 
-                mutableStateLiveData.postValue(Resource.networkError(DiscoveryState(latestEpisodes, channels, categories)))
+                    mutableStateLiveData.postValue(Resource.networkError(DiscoveryState(latestEpisodes, channels, categories)))
+                }
+            } catch (throwable: Exception) {
+                mutableStateLiveData.postValue(Resource.error(mutableStateLiveData.value?.data))
             }
         }
     }
