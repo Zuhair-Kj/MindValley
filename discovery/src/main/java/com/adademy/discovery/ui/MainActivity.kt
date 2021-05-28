@@ -2,7 +2,6 @@ package com.adademy.discovery.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -37,12 +36,6 @@ class MainActivity : AppCompatActivity() {
                 binding.lottieLoader.visibility = View.GONE
                 binding.recyclerView.visibility = View.VISIBLE
                 val state = resource.data
-                Log.d("ZZZ::State",
-                        String.format("categories = %d \n newEpisodes = %d \n channels = %d",
-                                state?.categories?.size?: 0,
-                                state?.newEpisodes?.size?: 0,
-                                state?.channels?.size?:0)
-                )
                 binding.swiperefresh.isRefreshing = false
                 offlineSnackBar.dismiss()
                 populateRows(state)
