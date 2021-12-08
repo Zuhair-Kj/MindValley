@@ -2,10 +2,6 @@
 
 Lists down a mock list of featured course, authors, latest episodes and hot genres
 
-Horizontal
-![2021-12-09 00 23 26](https://user-images.githubusercontent.com/9511896/145244990-b72d4e20-6bda-4d88-9d14-142128c34608.gif)
+Demo
 
-Vertical (Offline)
-
-
-![2021-12-09 00 26 24](https://user-images.githubusercontent.com/9511896/145245501-4f9de155-bb9e-4264-ac9c-d1a3888c0499.gif)
+![2021-12-09 00 59 45](https://user-images.githubusercontent.com/9511896/145250853-64d21edd-3cba-4090-b612-b9a0aafbeba2.gif)
